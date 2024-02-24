@@ -48,6 +48,6 @@ variable "variables_sub_auto_ip" {
 }
 
 variable "enviroment" {
-  type = string
+  type    = string
   default = "dev"
 }

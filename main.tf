@@ -8,8 +8,24 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 data "aws_region" "current" {}
 
+# Terraform Data Block - Lookup Ubuntu 22.04
+data "aws_ami" "ubuntu_22_04" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+  }
+
+    filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+}
+
 locals {
-  team = "app-sre"
+  team        = "app-sre"
   application = "corp_api"
   server_name = "ec2-${var.enviroment}-api-${var.variables_sub_az}"
 }
@@ -22,6 +38,7 @@ resource "aws_vpc" "vpc" {
     Name        = var.vpc_name
     Environment = "demo_environment"
     Terraform   = "true"
+    Region      = data.aws_region.current.name
   }
 }
 
@@ -123,17 +140,14 @@ resource "aws_nat_gateway" "nat_gateway" {
   }
 }
 
+
+
 resource "aws_instance" "web_server" {
-  ami           = "ami-0440d3b780d96b29d"
-  instance_type = "t2.micro"
-
-  subnet_id              = aws_subnet.public_subnets["public_subnet_1"].id
-  vpc_security_group_ids = ["sg-054e6fbb46c3089f0"]
-
+  ami                         = data.aws_ami.ubuntu_22_04.id
+  instance_type               = "t2.micro"
+  subnet_id                   = aws_subnet.public_subnets["public_subnet_1"].id
   tags = {
-    Name  = local.server_name
-    Owner = local.team
-    App   = local.application
+    Name = "Web EC2 Server"
   }
 }
 
