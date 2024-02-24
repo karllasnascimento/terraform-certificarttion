@@ -1,6 +1,6 @@
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
+  region  = "us-east-1"
   profile = "estudo-terraform"
 }
 
@@ -51,8 +51,8 @@ resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
-    gateway_id     = aws_internet_gateway.internet_gateway.id
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.internet_gateway.id
     #nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
   tags = {
@@ -65,7 +65,7 @@ resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.vpc.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
+    cidr_block = "0.0.0.0/0"
     # gateway_id     = aws_internet_gateway.internet_gateway.id
     nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
@@ -118,52 +118,25 @@ resource "aws_nat_gateway" "nat_gateway" {
 }
 
 resource "aws_instance" "web" {
-  ami = "ami-0440d3b780d96b29d"
+  ami           = "ami-0440d3b780d96b29d"
   instance_type = "t2.micro"
 
-  subnet_id = aws_subnet.public_subnets["public_subnet_1"].id
+  subnet_id              = aws_subnet.public_subnets["public_subnet_1"].id
   vpc_security_group_ids = ["sg-054e6fbb46c3089f0"]
 
   tags = {
-  "Terraform" = "true"
+    "Terraform" = "true"
   }
 }
 
-resource "aws_s3_bucket" "my-new-S3-bucket" {   
-  bucket = "my-new-tf-test-bucket-karlla-${random_id.randomness.hex}"
-
-  tags = {     
-    Name = "My S3 Bucket"     
-    Purpose = "Intro to Resource Blocks Lab"   
-  } 
-}
-
-resource "aws_s3_bucket_ownership_controls" "my_new_bucket_acl" {   
-  bucket = aws_s3_bucket.my-new-S3-bucket.id  
-  rule {     
-    object_ownership = "BucketOwnerPreferred"   
-  }
-}
-
-resource "aws_security_group" "my-new-security-group" {
-  name        = "web_server_inbound"
-  description = "Allow inbound traffic on tcp/443"
-  vpc_id      = aws_vpc.vpc.id
-
-  ingress {
-    description = "Allow 443 from the Internet"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_subnet" "variables-subnet" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.variables_sub_cidr
+  availability_zone       = var.variables_sub_az
+  map_public_ip_on_launch = var.variables_sub_auto_ip
 
   tags = {
-    Name    = "web_server_inbound"
-    Purpose = "Intro to Resource Blocks Lab"
+    Name      = "sub-variables-${var.variables_sub_az}"
+    Terraform = "true"
   }
-}
-
-resource "random_id" "randomness" {
-  byte_length = 16
 }
