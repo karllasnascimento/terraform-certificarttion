@@ -2,3 +2,5 @@
 *.hcl
 .venv
 terraform.tfplan
+terraform.tfstate
+terraform.tfstate.backup
