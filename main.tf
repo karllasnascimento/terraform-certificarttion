@@ -8,6 +8,12 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 data "aws_region" "current" {}
 
+locals {
+  team = "app-sre"
+  application = "corp_api"
+  server_name = "ec2-${var.enviroment}-api-${var.variables_sub_az}"
+}
+
 #Define the VPC
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
@@ -117,7 +123,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   }
 }
 
-resource "aws_instance" "web" {
+resource "aws_instance" "web_server" {
   ami           = "ami-0440d3b780d96b29d"
   instance_type = "t2.micro"
 
@@ -125,7 +131,9 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = ["sg-054e6fbb46c3089f0"]
 
   tags = {
-    "Terraform" = "true"
+    Name  = local.server_name
+    Owner = local.team
+    App   = local.application
   }
 }
 
