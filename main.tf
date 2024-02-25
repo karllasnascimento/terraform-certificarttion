@@ -17,7 +17,7 @@ data "aws_ami" "ubuntu_22_04" {
     values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
 
-    filter {
+  filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
@@ -143,9 +143,9 @@ resource "aws_nat_gateway" "nat_gateway" {
 
 
 resource "aws_instance" "web_server" {
-  ami                         = data.aws_ami.ubuntu_22_04.id
-  instance_type               = "t2.micro"
-  subnet_id                   = aws_subnet.public_subnets["public_subnet_1"].id
+  ami           = data.aws_ami.ubuntu_22_04.id
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public_subnets["public_subnet_1"].id
   tags = {
     Name = "Web EC2 Server"
   }
