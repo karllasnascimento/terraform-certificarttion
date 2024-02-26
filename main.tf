@@ -9,20 +9,24 @@ data "aws_availability_zones" "available" {}
 data "aws_region" "current" {}
 
 # Terraform Data Block - Lookup Ubuntu 22.04
-data "aws_ami" "ubuntu_22_04" {
-  most_recent = true
+# data "aws_ami" "ubuntu_22_04" {
+#   most_recent = true
+#   owners      = ["self"]
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
-  }
+#   filter {
+#     name   = "name"
+#     values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+#   }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+#   filter {
+#     name   = "virtualization-type"
+#     values = ["hvm"]
+#   }
 
-}
+
+
+
+# }
 
 locals {
   team        = "app-sre"
@@ -123,7 +127,6 @@ resource "aws_internet_gateway" "internet_gateway" {
 
 #Create EIP for NAT Gateway
 resource "aws_eip" "nat_gateway_eip" {
-  domain     = "vpc"
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
     Name = "demo_igw_eip"
@@ -143,7 +146,7 @@ resource "aws_nat_gateway" "nat_gateway" {
 
 
 resource "aws_instance" "web_server" {
-  ami           = data.aws_ami.ubuntu_22_04.id
+  ami           = "ami-0dc89734a2e4d50d0"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnets["public_subnet_1"].id
   tags = {
@@ -161,4 +164,13 @@ resource "aws_subnet" "variables-subnet" {
     Name      = "sub-variables-${var.variables_sub_az}"
     Terraform = "true"
   }
+}
+
+resource "tls_private_key" "generated" {
+  algorithm = "RSA"
+}
+
+resource "local_file" "private_key_pem" {
+  content  = tls_private_key.generated.private_key_pem
+  filename = "MyAWSKey.pem"
 }
