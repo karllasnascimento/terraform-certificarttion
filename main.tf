@@ -272,6 +272,7 @@ resource "aws_security_group" "vpc-web" {
 module "server" {
   source    = "./modules/server"
   ami       = data.aws_ami.ubuntu.id
+  size      = "t2.micro"
   subnet_id = aws_subnet.public_subnets["public_subnet_3"].id
   security_groups = [
     aws_security_group.vpc-ping.id,
@@ -298,6 +299,10 @@ output "public_ip" {
 
 output "public_dns" {
   value = module.server.public_dns
+}
+
+output "size" {
+  value = module.server.size
 }
 
 output "public_ip_server_subnet_1" {
@@ -342,11 +347,11 @@ module "autoscaling" {
   name = "myasg"
 
   vpc_zone_identifier = [aws_subnet.private_subnets["private_subnet_1"].id,
-  aws_subnet.private_subnets["private_subnet_2"].id, 
+    aws_subnet.private_subnets["private_subnet_2"].id,
   aws_subnet.private_subnets["private_subnet_3"].id]
-  min_size            = 0
-  max_size            = 1
-  desired_capacity    = 1
+  min_size         = 0
+  max_size         = 1
+  desired_capacity = 1
 
   # Launch template
   use_lt    = true
