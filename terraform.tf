@@ -1,7 +1,7 @@
 terraform {
-    backend "local" {
-      path = "terraform.tfstate"
-    }
+  backend "local" {
+    path = "terraform.tfstate"
+  }
   # backend "s3" {
   #   bucket  = "my-study-terraform-bucket"
   #   key     = "prod/aws_infra"
@@ -19,14 +19,14 @@ terraform {
   #   unlock_method  = "DELETE"
   # }
 
-#  backend "remote" {
-#     hostname = "app.terraform.io"
-#     organization = "estudy_certification"
+  #  backend "remote" {
+  #     hostname = "app.terraform.io"
+  #     organization = "estudy_certification"
 
-#     workspaces {
-#       name = "my-aws-app"
-#     }
-#   }
+  #     workspaces {
+  #       name = "my-aws-app"
+  #     }
+  #   }
 
   required_version = ">= 1.0.0"
   required_providers {
