@@ -26,7 +26,7 @@ output "public_ip" {
 # ping $(terrafomr output -raw public_ip)
 
 output "ec2_instance_arn" {
-  value = aws_instance.web_server.arn
+  value     = aws_instance.web_server.arn
   sensitive = true
 }
 

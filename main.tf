@@ -388,6 +388,13 @@ module "autoscaling" {
 
 }
 
+resource "aws_subnet" "list_subnet" {
+  for_each          = var.env
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = each.value.ip
+  availability_zone = each.value.az
+}
+
 output "asg_group_size" {
   value = module.autoscaling.autoscaling_group_max_size
 }
