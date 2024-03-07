@@ -315,9 +315,9 @@ module "server_subnet_1" {
   aws_security_group.vpc-web.id]
 }
 
-output "public_ip" {
-  value = module.server.public_ip
-}
+# output "public_ip" {
+#   value = module.server.public_ip
+# }
 
 output "public_dns" {
   value = module.server.public_dns
