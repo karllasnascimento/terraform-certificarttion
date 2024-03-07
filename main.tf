@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 locals {
-  team = "eu-mesma"
+  team        = "eu-mesma"
   application = "corp_api"
   server_name = "ec2-estudy"
 }
@@ -33,7 +33,7 @@ locals {
     Service   = local.service_name
     AppTeam   = local.app_team
     CreatedBy = local.createdby
- } 
+  }
 }
 
 #Retrieve the list of AZs in the current AWS region

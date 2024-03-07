@@ -11,6 +11,7 @@ variable "vpc_name" {
 variable "vpc_cidr" {
   type    = string
   default = "10.0.0.0/16"
+  # export TF_VAR_vpc_cidr=10.0.203.0/24
 }
 
 variable "private_subnets" {
