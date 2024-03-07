@@ -29,3 +29,12 @@ variable "public_subnets" {
     "public_subnet_3" = 3
   }
 }
+
+variable "phone_number" {
+  type      = string
+  sensitive = true
+  # default   = "867-5309"
+}
+
+# export TF_VAR_phone_number=867-5309
+#or add to our terraform cloud in the workspace variables
