@@ -1,6 +1,11 @@
 terraform {
-  backend "local" {
-    path = "terraform.tfstate"
+ backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "estudy_certification"
+
+    workspaces {
+      name = "my-aws-app"
+    }
   }
   # backend "s3" {
   #   bucket  = "my-study-terraform-bucket"
