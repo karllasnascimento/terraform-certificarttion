@@ -6,3 +6,5 @@ terraform.tfstate
 terraform.tfstate.backup
 MyAWSKey.pem
 .terraform.tfstate.lock.info
+*.pem
+*.pub
