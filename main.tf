@@ -1,16 +1,18 @@
 # Configure the AWS Provider
 provider "aws" {
+  alias = "east"
   region  = "us-east-1"
   profile = "estudo-terraform"
-  default_tags {
-    tags = {
-      Enviroment  = terraform.workspace
-      Owner       = "Karlla"
-      Provisioned = "terraform"
-    }
+
   }
 
-}
+  provider "aws" {
+  alias = "west"
+  region  = "us-west-2"
+  profile = "estudo-terraform"
+  
+  }
+
 
 locals {
   team        = "eu-mesma"
@@ -69,11 +71,23 @@ resource "aws_iam_policy" "policy" {
 
 #Define the VPC 
 resource "aws_vpc" "vpc" {
+  provider = aws.east
   cidr_block = var.vpc_cidr
 
   tags = {
     Name        = var.vpc_name
     Environment = "demo_environment"
+    Terraform   = "true"
+  }
+}
+
+resource "aws_vpc" "vpc-west" {
+  provider = aws.west
+  cidr_block = var.vpc_cidr
+
+  tags = {
+    Name        = var.vpc_name
+    Environment = "disaster_recovery_environment"
     Terraform   = "true"
   }
 }
